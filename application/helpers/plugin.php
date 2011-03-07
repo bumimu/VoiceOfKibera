@@ -11,7 +11,6 @@ class plugin_Core {
 	
 	protected static $javascripts = array();
 	protected static $stylesheets = array();
-	protected static $sms_providers = array();
 
 	public static function add_javascript($javascripts = array())
 	{
@@ -43,23 +42,10 @@ class plugin_Core {
 			self::$stylesheets[] = $stylesheet;
 		}
 	}
-	
-	public static function add_sms_provider($sms_providers = array())
-	{
-		if ( ! is_array($sms_providers))
-			$sms_providers = array($sms_providers => $sms_providers);
-
-		foreach ($sms_providers as $key => $sms_provider)
-		{
-			self::$sms_providers[$key] = $sms_provider;
-		}
-	}	
 
 	public static function render($type)
 	{
 		$files = $type.'s';
-		
-		$html = '';
 
 		foreach (self::$$files as $key => $file)
 		{
@@ -71,7 +57,7 @@ class plugin_Core {
 						// Add the javascript suffix
 						$file .= '.css';
 					}
-					$html .= '<link rel="stylesheet" type="text/css" href="'.url::base()."plugins/".$file.'" />';
+					echo '<link rel="stylesheet" type="text/css" href="'.url::site()."plugins/".$file.'" />';
 					break;
 				case 'javascript':
 					if (substr_compare($file, '.js', -3, 3, FALSE) !== 0)
@@ -79,17 +65,10 @@ class plugin_Core {
 						// Add the javascript suffix
 						$file .= '.js';
 					}
-					$html .= '<script type="text/javascript" src="'.url::base()."plugins/".$file.'"></script>';
+					echo '<script type="text/javascript" src="'.url::base()."plugins/".$file.'"></script>';
 					break;
 			}
 		}
-		
-		return $html;
-	}
-	
-	public static function get_sms_providers()
-	{
-		return self::$sms_providers;
 	}	
 	
 	/**
@@ -151,10 +130,10 @@ class plugin_Core {
 	public static function settings($plugin = NULL)
 	{
 		// Determine if readme.txt (Case Insensitive) exists
-		$file = PLUGINPATH.$plugin."/controllers/admin/".$plugin."_settings.php";
+		$file = PLUGINPATH.$plugin."/controllers/admin/".$plugin."_admin.php";
 		if ( file::file_exists_i($file) )
 		{
-			return $plugin."_settings";
+			return $plugin."_admin";
 		}
 		else
 		{

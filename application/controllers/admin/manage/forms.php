@@ -21,11 +21,13 @@ class Forms_Controller extends Admin_Controller
 		parent::__construct();
 		$this->template->this_page = 'manage';
 		
-		// If user doesn't have access, redirect to dashboard
-		if ( ! admin::permissions($this->user, "manage"))
-		{
-			url::redirect(url::site().'admin/dashboard');
+		// If this is not a super-user account, redirect to dashboard
+		if (!$this->auth->logged_in('admin'))
+        {
+             url::redirect('admin/dashboard');
 		}
+		
+		// $profiler = new Profiler;
 	}
 	
 	
@@ -85,7 +87,7 @@ class Forms_Controller extends Admin_Controller
 					$form_saved = TRUE;
 					$form_action = strtoupper(Kohana::lang('ui_admin.deleted'));
 				}
-				else if($post->action == 'h')
+				else if($post->action == 'a')
 				{ // Active/Inactive Action
 					if ($custom_form->loaded==true)
 					{
@@ -110,9 +112,6 @@ class Forms_Controller extends Admin_Controller
 					$form_saved = TRUE;
 					$form_action = strtoupper(Kohana::lang('ui_admin.created_edited'));
 				}
-				
-				// Empty $form array
-				array_fill_keys($form, '');
 				
 			} else {
 				// repopulate the form fields
@@ -146,8 +145,7 @@ class Forms_Controller extends Admin_Controller
 			// 4 => 'Add Attachments'
 		);
 
-        $this->template->content->form = $form;
-		$this->template->content->form_error = $form_error;
+        $this->template->content->form_error = $form_error;
         $this->template->content->form_saved = $form_saved;
 		$this->template->content->form_action = $form_action;
         $this->template->content->pagination = $pagination;
@@ -159,7 +157,6 @@ class Forms_Controller extends Admin_Controller
         // Javascript Header
         $this->template->js = new View('admin/forms_js');
 		$this->template->js->form_id = $form_id;
-		$this->template->form_error = $form_error;
 	}
 
 	
@@ -608,7 +605,7 @@ class Forms_Controller extends Admin_Controller
 		
 		$html = "";
 		$html .="<input type=\"hidden\" name=\"form_id\" id=\"form_id\" value=\"".$form_id."\">";
-		$html .="<input type=\"hidden\" name=\"field_id\" id=\"field_id\" value=\"".$field_id."\">";
+		$html .="<input type=\"hidden\" name=\"field_id\" id=\"field_id\" value=\"\">";
 		$html .="<input type=\"hidden\" name=\"field_isdate\" id=\"field_id\" value=\"0\">";
 		$html .="<div id=\"form_result_".$form_id."\" class=\"forms_fields_result\"></div>";
 		$html .="<div class=\"forms_item\">"; 
@@ -707,7 +704,7 @@ class Forms_Controller extends Admin_Controller
 			->orderby('id', 'asc')
 			->find_all();
 		
-		$html = "<form action=\"\">";
+		$html = "<form>";
 		foreach ($fields as $field)
 		{
 			$field_id = $field->id;

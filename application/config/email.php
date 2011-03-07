@@ -20,6 +20,3 @@ $config['driver'] = 'native';
  * @param   array   smtp: hostname, (username), (password), (port), (auth), (encryption)
  */
 $config['options'] = NULL;
-
-
-$config['max_imap_messages'] = 10;

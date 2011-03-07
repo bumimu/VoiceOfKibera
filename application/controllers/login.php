@@ -23,9 +23,7 @@ class Login_Controller extends Template_Controller {
     protected $session;
 	
     // Main template
-    public $template = 'login';
-    
-    protected $destination = 'admin/dashboard';
+    public $template = 'admin/login';
 	
 
     public function __construct()
@@ -47,7 +45,7 @@ class Login_Controller extends Template_Controller {
         {
             if ($user = Session::instance()->get('auth_user',FALSE))
             {
-                url::redirect($this->destination);
+                url::redirect('admin/dashboard');
             }
         }
 				
@@ -88,7 +86,7 @@ class Login_Controller extends Template_Controller {
                 // Attempt a login
                 if ($auth->login($user, $postdata_array['password'], $remember))
                 {
-                    url::redirect($this->destination);
+                    url::redirect('admin/dashboard');
                 }
                 else
                 {
@@ -104,25 +102,10 @@ class Login_Controller extends Template_Controller {
             $errors = arr::overwrite($errors, $_POST->errors('auth'));
             $form_error = TRUE;
         }
-        
-        $this->template->site_name = Kohana::config('settings.site_name');
-		$this->template->site_tagline = Kohana::config('settings.site_tagline');
 		
         $this->template->errors = $errors;
         $this->template->form = $form;
         $this->template->form_error = $form_error;
-    }
-    
-    
-    public function front()
-    {
-    	/**
-	     * If the login page is for the frontend, hit this function first.
-	     */
-		
-		$this->destination = '/';
-		$this->index();
-		
     }
     
     /**
@@ -139,11 +122,11 @@ class Login_Controller extends Template_Controller {
         {
             if ($user = Session::instance()->get('auth_user',FALSE))
             {
-                url::redirect($this->destination);
+                url::redirect('admin/dashboard');
             }
         }
     	
-    	$this->template = new View('reset_password');
+    	$this->template = new View('admin/reset_password');
 		
 		$this->template->title = Kohana::lang('ui_admin.password_reset');
 		$form = array
@@ -210,7 +193,7 @@ class Login_Controller extends Template_Controller {
 
 		// Javascript Header
 		//TODO create reset_password js file.
-		$this->template->js = new View('reset_password_js');
+		$this->template->js = new View('admin/reset_password_js');
 	}
 
     /**
@@ -226,11 +209,11 @@ class Login_Controller extends Template_Controller {
         {
             if ($user = Session::instance()->get('auth_user',FALSE))
             {
-                url::redirect($this->destination);
+                url::redirect('admin/dashboard');
             }
         }
     	
-    	$this->template = new View('new_password');
+    	$this->template = new View('admin/new_password');
 		
 		$this->template->title = Kohana::lang('ui_admin.new_password');
 		
