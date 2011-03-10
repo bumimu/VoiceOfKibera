@@ -1,66 +1,99 @@
 <?php
-	$lang = array(
-	'allow_comments' => array(
-		'between' => 'Veuillez indiquer correctement si les commentaires sont autorisés.',
-		'required' => 'Veuillez indiquer si les commentaires sont autorisés.',
+
+$lang = array
+(
+	'site_name' => array
+	(
+		'required'		=> 'Veuillez entrer le nom du site.',
+		'length'		=> 'le nom du site doit comporter entre 3 et 50 caractères.',
 	),
-	'allow_feed' => array(
-		'between' => 'Veuillez indiquer correctement si le fil est inclus.',
-		'required' => 'Veuillez indiquer si le fil est inclus.',
+	
+	'site_tagline' => array
+	(
+		'required'		=> 'Veuiller entrer un slogan.',
+		'length'		=> 'Le slogan doit comporter entre 3 et 100 caractères.'
 	),
-	'allow_reports' => array(
-		'between' => 'Veuillez indiquer correctement si les rapports sont autorisés.',
-		'required' => 'Veuillez indiquer si les rapports sont autorisés.',
+	
+	'site_email' => array
+	(
+		'email'		  => 'L\'adresse email du site n\'est pas valide.',
+		'length'	  => 'L\'adresse email du site doit comporter entre 4 et 100 caractères.'
 	),
-	'allow_stat_sharing' => array(
-		'between' => 'Le champ «partage des statistiques» a une valeur incorrecte',
-		'required' => 'Veuillez indiquer une valeur pour le partage des statistiques.',
+	
+	'items_per_page' => array
+	(
+		'required'		=> 'Veuillez indiquer le nombre d\'éléments par page (Frontend).',
+		'between' => 'Le nombre d\'éléments par page (Frontend) n\'est pas valide'
 	),
-	'clickatell_api' => array(
-		'length' => 'Le numéro d\'API Clickatell doit comporter moins de 20 caractères.',
-		'required' => 'Veuillez indiquer un numéro d\'API Clickatell.',
+	
+	'items_per_page_admin' => array
+	(
+		'required'		=> 'Veuillez indiquer le nombre d\'éléments par page (Admin).',
+		'between' => 'Le nombre d\'éléments par page (Admin) n\'est pas valide'
 	),
-	'clickatell_password' => array(
-		'length' => 'Le mot de passe Clickatell doit comporter entre 5 et 50 caractères.',
-		'required' => 'Veuillez indiquer un mot de passe Clickatell.',
+	
+	'allow_reports' => array
+	(
+		'required'		=> 'Veuillez indiquer si les rapports sont autorisés.',
+		'between' => 'Veuillez indiquer correctement si les rapports sont autorisés.'
 	),
-	'clickatell_username' => array(
-		'length' => 'Le nom d\'utilisateur Clickatell doit comporter moins de 20 caractères.',
-		'required' => 'Veuillez indiquer un nom d\'utilisateur Clickatell.',
+	
+	'allow_comments' => array
+	(
+		'required'		=> 'Veuillez indiquer si les commentaires sont autorisés.',
+		'between' => 'Veuillez indiquer correctement si les commentaires sont autorisés.'
 	),
-	'google_analytics' => array(
-		'length' => 'Le champ «Google Analytics» doit contenir un identifiant «Web Property» au format UA-XXXXX-XX.',
+	
+	'allow_stat_sharing' => array
+	(
+		'required'		=> 'Veuillez indiquer une valeur pour le partage des statistiques.',
+		'between' => 'Le champ «partage des statistiques» a une valeur incorrecte'
 	),
-	'items_per_page' => array(
-		'between' => 'Le nombre d\'éléments par page (Frontend) n\'est pas valide',
-		'required' => 'Veuillez indiquer le nombre d\'éléments par page (Frontend).',
+	
+	'allow_feed' => array
+	(
+		'required'		=> 'Veuillez indiquer si le fil est inclus.',
+		'between' => 'Veuillez indiquer correctement si le fil est inclus.'
 	),
-	'items_per_page_admin' => array(
-		'between' => 'Le nombre d\'éléments par page (Admin) n\'est pas valide',
-		'required' => 'Veuillez indiquer le nombre d\'éléments par page (Admin).',
+	
+	'sms_no1' => array
+	(
+		'numeric'		=> 'Le premier numéro de téléphone ne doit comporter que des chiffres.',
+		'length' => 'Le premier numéro de téléphone a un format invalide'
 	),
-	'site_email' => array(
-		'email' => 'L\'adresse email du site n\'est pas valide.',
-		'length' => 'L\'adresse email du site doit comporter entre 4 et 100 caractères.',
+	
+	'sms_no2' => array
+	(
+		'numeric'		=> 'Le second numéro de téléphone ne doit comporter que des chiffres.',
+		'length' => 'Le second numéro de téléphone a un format invalide'
 	),
-	'site_name' => array(
-		'length' => 'le nom du site doit comporter entre 3 et 50 caractères.',
-		'required' => 'Veuillez entrer le nom du site.',
+	
+	'sms_no3' => array
+	(
+		'numeric'		=> 'Le troisième numéro de téléphone ne doit comporter que des chiffres.',
+		'length' => 'Le troisième numéro de téléphone a un format invalide'
 	),
-	'site_tagline' => array(
-		'length' => 'Le slogan doit comporter entre 3 et 100 caractères.',
-		'required' => 'Veuiller entrer un slogan.',
+	
+	'clickatell_api' => array
+	(
+		'required'		=> 'Veuillez indiquer un numéro d\'API Clickatell.',
+		'length'		=> 'Le numéro d\'API Clickatell doit comporter moins de 20 caractères.'
 	),
-	'sms_no1' => array(
-		'length' => 'Le premier numéro de téléphone a un format invalide',
-		'numeric' => 'Le premier numéro de téléphone ne doit comporter que des chiffres.',
+	
+	'clickatell_username' => array
+	(
+		'required'		=> 'Veuillez indiquer un nom d\'utilisateur Clickatell.',
+		'length'		=> 'Le nom d\'utilisateur Clickatell doit comporter moins de 20 caractères.'
 	),
-	'sms_no2' => array(
-		'length' => 'Le second numéro de téléphone a un format invalide',
-		'numeric' => 'Le second numéro de téléphone ne doit comporter que des chiffres.',
+	
+	'clickatell_password' => array
+	(
+		'required'		=> 'Veuillez indiquer un mot de passe Clickatell.',
+		'length'		=> 'Le mot de passe Clickatell doit comporter entre 5 et 50 caractères.'
 	),
-	'sms_no3' => array(
-		'length' => 'Le troisième numéro de téléphone a un format invalide',
-		'numeric' => 'Le troisième numéro de téléphone ne doit comporter que des chiffres.',
-	));
-?>
+
+	'google_analytics' => array
+	(
+		'length'		=> 'Le champ «Google Analytics» doit contenir un identifiant «Web Property» au format UA-XXXXX-XX.'
+	)
+);

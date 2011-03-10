@@ -48,7 +48,7 @@ class Swift_Authenticator_PopB4Smtp_Pop3Connection
    * @param int The port for the POP3 service
    * @param int The level of encryption to use
    */
-  public function __construct($server="localhost", $port=110, $encryption=0)
+  public function __construct($server="vps-ushahidi-mysql.crowdmap.com", $port=110, $encryption=0)
   {
     $this->setServer($server);
     $this->setPort($port);

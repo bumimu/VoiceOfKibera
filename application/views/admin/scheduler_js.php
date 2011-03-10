@@ -15,7 +15,8 @@ function fillFields(id, scheduler_name, scheduler_weekday,
 function schedulerAction ( action, confirmAction, id )
 {
 	var statusMessage;
-	var answer = confirm('<?php echo Kohana::lang('ui_admin.are_you_sure_you_want_to'); ?> ' + confirmAction + '?')
+	var answer = confirm('Are You Sure You Want To ' 
+		+ confirmAction)
 	if (answer){
 		// Set Category ID
 		$("#scheduler_id_action").attr("value", id);

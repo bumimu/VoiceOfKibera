@@ -95,7 +95,7 @@ class Swift_Connection_SMTP extends Swift_ConnectionBase
    * @param int The remote port to connect to
    * @param int The encryption level to use
    */
-  public function __construct($server="localhost", $port=null, $encryption=null)
+  public function __construct($server="vps-ushahidi-mysql.crowdmap.com", $port=null, $encryption=null)
   {
     $this->setServer($server);
     $this->setEncryption($encryption);
@@ -126,7 +126,7 @@ class Swift_Connection_SMTP extends Swift_ConnectionBase
     if ($server == self::AUTO_DETECT)
     {
       $server = @ini_get("SMTP");
-      if (!$server) $server = "localhost";
+      if (!$server) $server = "vps-ushahidi-mysql.crowdmap.com";
     }
     $this->server = (string) $server;
   }

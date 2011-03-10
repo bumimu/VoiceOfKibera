@@ -1,5 +1,12 @@
 <?php
-	$lang = array(
+
+/**
+ * FRONT END USER INTERFACE INTERNATIONALIZATION
+ * Strings associated with the front end UI
+ * fr_FR
+ */
+
+$lang = array(
 	'about' => 'à propos de',
 	'alerts' => 'Recevoir des alertes',
 	'alerts_alert_me' => 'Alerte-moi si un rapport est déposé dans ou autour de:',
@@ -15,19 +22,20 @@
 	'alerts_step1_select_city' => '<strong>1er pas:</strong> Choisissez votre ville ou lieu:',
 	'alerts_step2_send_alerts' => '<strong>2e pas:</strong> Envoyer des alertes à mon:',
 	'all' => 'Tout',
-	'allowed' => 'Permis',
 	'all_categories' => 'Toutes catégories',
+	'allowed' => 'Permis',
 	'and' => 'et',
 	'approve' => 'Approuve',
+	'approve_this_report' => 'Approuver ce rapport',
 	'approved' => 'Approuvé',
 	'approved_reports' => 'Rapports approuvés',
-	'approve_this_report' => 'Approuver ce rapport',
 	'blog' => 'Blog',
 	'category_filter' => 'Filtre des catégories',
 	'close' => 'Fermer',
 	'clusters' => 'Groupes',
 	'contact' => 'Contactez-nous',
 	'copyright' => 'Copyright © 2010 Ushahidi.com. Tous droits réservés.',
+	'date' => 'DATE',
 	'date' => 'Date',
 	'feedback' => 'Rétroaction',
 	'filters' => 'Filtres',
@@ -41,6 +49,7 @@
 	'news' => 'Nouvelles',
 	'official_news' => 'Nouvelles officielles et actualité',
 	'pictures' => 'Photos',
+	'report_an_incident' => 'Déclarer un incident',
 	'reports' => 'Rapports',
 	'reports_btn_browse' => 'Rechercher',
 	'reports_btn_submit' => 'Soumettre',
@@ -60,7 +69,6 @@
 	'reports_time' => 'Heure',
 	'reports_title' => 'Titre du Rapport',
 	'reports_video' => 'Lien Vidéo',
-	'report_an_incident' => 'Déclarer un incident',
 	'search' => 'RECHERCHER',
 	'select_one' => 'Choisissez un élément',
 	'source' => 'SOURCE',
@@ -72,5 +80,4 @@
 	'title' => 'TITRE',
 	'video' => 'Vidéo',
 	'views' => 'Affichage',
-	);
-?>
+);

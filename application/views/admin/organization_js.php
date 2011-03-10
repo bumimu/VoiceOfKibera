@@ -32,7 +32,8 @@ function fillFields(id, organization_name, organization_website,
 function orgAction ( action, confirmAction, id )
 {
 	var statusMessage;
-	var answer = confirm('<?php echo Kohana::lang('ui_admin.are_you_sure_you_want_to'); ?> ' + confirmAction + '?')
+	var answer = confirm('Are You Sure You Want To ' 
+		+ confirmAction + ' items?')
 	if (answer){
 		// Set Category ID
 		$("#org_id_action").attr("value", id);

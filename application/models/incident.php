@@ -18,8 +18,7 @@
 class Incident_Model extends ORM
 {
 	protected $has_many = array('category' => 'incident_category', 'media', 'verify', 'comment',
-		'rating', 'alert' => 'alert_sent', 'incident_lang', 'form_response','cluster' => 'cluster_incident',
-		'geometry');
+		'rating', 'alert' => 'alert_sent', 'incident_lang', 'form_response','cluster' => 'cluster_incident');
 	protected $has_one = array('location','incident_person','user','message','twitter','form');
 	protected $belongs_to = array('sharing');
 
@@ -67,9 +66,9 @@ class Incident_Model extends ORM
 	{
 		if($verified)
 		{
-			$count = ORM::factory('incident')->where('incident_verified', '1')->where('incident_active', '1')->count_all();
+			$count = ORM::factory('incident')->where('incident_verified', '1')->count_all();
 		}else{
-			$count = ORM::factory('incident')->where('incident_verified', '0')->where('incident_active', '1')->count_all();
+			$count = ORM::factory('incident')->where('incident_verified', '0')->count_all();
 		}
 
 		return $count;
@@ -197,50 +196,5 @@ class Incident_Model extends ORM
 		}
 		$graphs = json_encode($all_graphs);
 		return $graphs;
-	}
-
-	/*
-	* get the number of reports by date for dashboard chart
-	*/
-	public static function get_number_reports_by_date($range=NULL)
-	{
-		// Table Prefix
-		$table_prefix = Kohana::config('database.default.table_prefix');
-		
-		$db = new Database();
-		
-		if ($range == NULL)
-		{
-			$sql = 'SELECT COUNT(id) as count, DATE(incident_date) as date, MONTH(incident_date) as month, DAY(incident_date) as day, YEAR(incident_date) as year FROM '.$table_prefix.'incident GROUP BY date ORDER BY incident_date ASC';
-		}else{
-			$sql = 'SELECT COUNT(id) as count, DATE(incident_date) as date, MONTH(incident_date) as month, DAY(incident_date) as day, YEAR(incident_date) as year FROM '.$table_prefix.'incident WHERE incident_date >= DATE_SUB(CURDATE(), INTERVAL '.mysql_escape_string($range).' DAY) GROUP BY date ORDER BY incident_date ASC';
-		}
-		
-		$query = $db->query($sql);
-		$result = $query->result_array(FALSE);
-		
-		$array = array();
-		foreach ($result AS $row)
-		{
-			$timestamp = mktime(0,0,0,$row['month'],$row['day'],$row['year'])*1000;
-			$array["$timestamp"] = $row['count'];
-		}
-
-		return $array;
-	}
-
-	/*
-	* return an array of the dates of all approved incidents
-	*/
-	static function get_incident_dates()
-	{
-		//$incidents = ORM::factory('incident')->where('incident_active',1)->incident_date->find_all();
-		$incidents = ORM::factory('incident')->where('incident_active',1)->select_list('id', 'incident_date');
-		$array = array();
-		foreach ($incidents as $id => $incident_date)
-		{
-			$array[] = $incident_date;
-		}
-		return $array;
 	}
 }

@@ -68,36 +68,51 @@
 			$("#" + field).attr("value", autoreply);		
 		}
 
-		function messagesAction ( action, confirmAction, message_id )
+        function submitIds()
+        {
+            if (confirm("Delete cannot be undone. Are you sure you want to continue?"))
+                $('#messagesMain').submit(); 
+        }
+	
+		// Ajax Submission
+		function itemAction ( action, confirmAction, item_id, level )
 		{
 			var statusMessage;
-			if( !isChecked( "message" ) && message_id=='' )
+			if( !isChecked( "message" ) && item_id=='' )
 			{ 
-				alert('Please select at least one message.');
+				alert('Please select at least one report.');
 			} else {
-				var answer = confirm('<?php echo Kohana::lang('ui_admin.are_you_sure_you_want_to'); ?> ' + confirmAction + '?')
+				var answer = confirm('Are You Sure You Want To ' + confirmAction + ' items?')
 				if (answer){
-
 					// Set Submit Type
 					$("#action").attr("value", action);
-
-					if (message_id != '') 
+					
+					if (item_id != '') 
 					{
 						// Submit Form For Single Item
-						$("#message_single").attr("value", message_id);
-						$("#messageMain").submit();
+						$("#item_single").attr("value", item_id);
+						$("#messagesMain").submit();
 					}
 					else
 					{
 						// Set Hidden form item to 000 so that it doesn't return server side error for blank value
-						$("#message_single").attr("value", "000");
-
+						$("#item_single").attr("value", "000");
+						$("#level").attr("value", level);
 						// Submit Form For Multiple Items
-						$("#messageMain").submit();
-					}
+						$('#messagesMain').submit();
+/*						
+						$("input[name='incident_id[]'][checked]").each(
+							function() 
+							{
+								$("#messageMain").submit();
+							}
+						);
+*/						
 
+					}
+				
 				} else {
-				//	return false;
+					return false;
 				}
 			}
 		}

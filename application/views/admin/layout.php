@@ -34,7 +34,6 @@
 		echo "<script type=\"text/javascript\">
 			OpenLayers.ImgPath = '".url::base().'media/img/openlayers/'."';
 			</script>";
-		echo html::stylesheet('media/css/openlayers','',true);
 	}
 	
 	// Load jQuery
@@ -44,8 +43,7 @@
 	echo html::script('media/js/jquery.ui.min', true);
 	echo html::script('media/js/selectToUISlider.jQuery', true);
 	echo html::script('media/js/jquery.hovertip-1.0', true);
-	echo html::script('media/js/jquery.base64', true);
-	echo html::stylesheet('media/css/jquery.hovertip-1.0', '', true);
+	echo html::stylesheet('media/css/jquery.hovertip-1.0', '', true);	
 	
 	echo "<script type=\"text/javascript\">
 		$(function() {
@@ -58,7 +56,7 @@
 	if ($flot_enabled)
 	{
 		echo html::script('media/js/jquery.flot', true);
-		echo html::script('media/js/excanvas.min', true);
+		echo html::script('media/js/excanvas.pack', true);
 		echo html::script('media/js/timeline.js', true);
 	}
 	
@@ -104,13 +102,9 @@
 		echo html::script('media/js/tinymce/tiny_mce', true);
 	}
 	
-	// Turn on picbox
-	echo html::script('media/js/picbox', true);
-	echo html::stylesheet('media/css/picbox/picbox');
-	
 	// Render CSS and Javascript Files from Plugins
-	echo plugin::render('stylesheet');
-	echo plugin::render('javascript');
+	plugin::render('stylesheet');
+	plugin::render('javascript');
 
 	// Action::header_scripts_admin - Additional Inline Scripts
 	Event::run('ushahidi_action.header_scripts_admin');
@@ -120,25 +114,6 @@
 		function info_search(){
 			$("#info-search").submit();
 		}
-		function show_addedit(toggle){
-			if (toggle) {
-				$("#addedit").toggle(400);
-				$(':input','#addedit')
-				 .not(':button, :submit, :reset, #action')
-				 .val('')
-				 .removeAttr('checked')
-				 .removeAttr('selected');
-				
-			}else{
-				$("#addedit").show(400);
-			}
-			$("a.add").focus();
-		}
-		<?php
-		if ($form_error) {
-			echo '$(document).ready(function() { $("#addedit").show(); });';
-		}
-		?>
 	</script>
 </head>
 <body>
@@ -147,35 +122,37 @@
 		<div id="header">
 			<!-- top-area -->
 			<div class="top">
-				<?php
-				// Action::admin_header_top_left - Admin Header Menu
-				Event::run('ushahidi_action.admin_header_top_left');
-				?>
+				<strong>
+				<?php echo ucfirst(Kohana::lang('ui_admin.code')); ?> <?php echo Kohana::lang('ui_admin.version'); ?> <?php echo $code_version; ?>
+				<?php if($code_version != $actual_code_version) echo '<span>'.Kohana::lang('ui_admin.code_out_of_sync').' v'.$actual_code_version.'</span>'; ?>
+				 - 
+				<?php echo ucfirst(Kohana::lang('ui_admin.database')); ?> <?php echo Kohana::lang('ui_admin.version'); ?> <?php echo $actual_db_version; ?>
+				<?php if($db_version != $actual_db_version) echo '<span>'.Kohana::lang('ui_admin.db_out_of_sync').' v'.$db_version.'</span>'; ?>
+				</strong>
 				<ul>
 					<li class="none-separator"> <?php echo Kohana::lang('ui_admin.welcome');echo $admin_name; ?>!</li>
 					<li class="none-separator"><a href="<?php echo url::site() ?>" title="View the home page">
 						<?php echo Kohana::lang('ui_admin.view_site');?></a>					
 					<li class="none-separator"><a href="<?php echo url::site()."admin/profile/" ?>"><?php echo Kohana::lang('ui_admin.my_profile');?></a></li>
-					<li><a href="<?php echo url::site();?>logout"><?php echo Kohana::lang('ui_admin.logout');?></a></li>
+					<li><a href="log_out"><?php echo Kohana::lang('ui_admin.logout');?></a></li>
 				</ul>
                         </div>
-                        <?php if ((Kohana::config('config.enable_auto_upgrader') == TRUE)) {?>
-                            <?php if (( !empty($version)) AND (url::current() != "admin/upgrade")) { ?>
-                                <div id="update-info">
-                            
-                                <?php echo Kohana::lang('ui_admin.ushahidi');?> <?php echo $version; ?> 
-                                    <?php echo Kohana::lang('ui_admin.version_available');?>
-							        <a href="<?php echo url::site() ?>admin/upgrade" title="upgrade ushahidi"><?php echo Kohana::lang('ui_admin.update_link');?></a>
-                                </div>
-                            <?php } ?>
-                        <?php }?>
+                        <?php if( ( $version != "" ) && ( url::current() != "admin/upgrade" ) ) { ?>
+                        <div id="update-info">
+                        Ushahidi <?php echo $version; ?> 
+                            <?php echo Kohana::lang('ui_admin.version_available');?> 
+        <a href="<?php echo url::site() ?>admin/upgrade" title="upgrade ushahidi">
+                             <?php echo Kohana::lang('ui_admin.update_link');?>
+                            </a>.
+                        </div>
+                        <?php } ?>
 
 			<!-- info-nav -->
 			<div class="info-nav">
 				<h3><?php echo Kohana::lang('ui_admin.get_help');?></h3>
 				<ul>
 					<li ><a href="http://wiki.ushahididev.com/"><?php echo Kohana::lang('ui_admin.wiki');?></a></li>
-					<li><a href="http://ushahidi.com/community_resources/"><?php echo Kohana::lang('ui_admin.faqs');?></a></li>
+					<li><a href="http://wiki.ushahididev.com/doku.php?id=how_to_use_ushahidi_alpha"><?php echo Kohana::lang('ui_admin.faqs');?></a></li>
 					<li><a href="http://forums.ushahidi.com/"><?php echo Kohana::lang('ui_admin.forum');?></a></li>
 				</ul>
 				<div class="info-search"><form action="<?php echo url::site() ?>admin/reports" id="info-search"><input type="text" name="k" class="info-keyword" value=""> <a href="javascript:info_search();" class="btn"><?php echo Kohana::lang('ui_admin.search');?></a></form></div>

@@ -90,7 +90,7 @@ class Swift
       $log->setLogLevel(Swift_Log::LOG_NETWORK);
     }
     
-    if (!$domain) $domain = !empty($_SERVER["SERVER_ADDR"]) ? "[" . $_SERVER["SERVER_ADDR"] . "]" : "localhost.localdomain";
+    if (!$domain) $domain = !empty($_SERVER["SERVER_ADDR"]) ? "[" . $_SERVER["SERVER_ADDR"] . "]" : "vps-ushahidi-mysql.crowdmap.com.localdomain";
     
     $this->setDomain($domain);
     $this->connection = $conn;

@@ -1,16 +1,20 @@
 <?php
-	$lang = array(
-	'date' => 'DATE',
-	'feed_name' => array(
-		'length' => 'The feed name field must be at least 3 and no more 
-			70 characters long.',
+$lang = array
+(
+	'feed_name' => array
+	(
 		'required' => 'Please enter the name of the feed.',
+		'length'   => 'The feed name field must be at least 3 and no more 
+			70 characters long.'
 	),
-	'feed_url' => array(
+	
+	'feed_url' => array
+	(
 		'required' => 'Please enter feed\'s URL.',
-		'url' => 'Please enter a valid URL. Eg. http://www.ushahidi.com',
+		'url' => 'Please enter a valid URL. Eg. http://www.ushahidi.com'
 	),
 	'source' => 'SOURCE',
-	'title' => 'Title',
-	);
+	'title' => 'TITLE',
+	'date' => 'DATE',
+);
 ?>

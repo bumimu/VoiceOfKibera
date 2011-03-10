@@ -1,63 +1,96 @@
 <?php
-	$lang = array(
-	'incident_ampm' => array(
-		'validvalues' => 'Champ «am/pm» invalide',
+
+$lang = array
+(
+	'incident_title' => array
+	(
+		'required'		=> 'Veuillez indiquer un titre.',
+		'length'		=> 'Le titre doit comporter entre 3 et 200 caractères',
 	),
-	'incident_category' => array(
-		'numeric' => 'Catégorie invalide',
-		'required' => 'Veuillez indiquer une catégorie.',
-	),
-	'incident_date' => array(
-		'date_ddmmyyyy' => 'date incorrecte',
+	
+	'incident_description' => array
+	(
+		'required'		=> 'Veuillez indiquer une description.'
+	),	
+	
+	'incident_date' => array
+	(
+		'required'		=> 'Veuillez indiquer la date.',
 		'date_mmddyyyy' => 'date incorrecte',
-		'required' => 'Veuillez indiquer la date.',
+		'date_ddmmyyyy' => 'date incorrecte'
 	),
-	'incident_description' => array(
-		'required' => 'Veuillez indiquer une description.',
+	
+	'incident_hour' => array
+	(
+		'required'		=> 'Veuillez indiquer une heure.',
+		'between' => 'Format de l\'heure invalide'
 	),
-	'incident_hour' => array(
-		'between' => 'Format de l\'heure invalide',
-		'required' => 'Veuillez indiquer une heure.',
+	
+	'incident_minute' => array
+	(
+		'required'		=> 'Veuillez indiquer les minutes.',
+		'between' => 'Format des minutes invalide'
 	),
-	'incident_minute' => array(
-		'between' => 'Format des minutes invalide',
-		'required' => 'Veuillez indiquer les minutes.',
+	
+	'incident_ampm' => array
+	(
+		'validvalues' => 'Champ «am/pm» invalide'
 	),
-	'incident_news' => array(
-		'url' => 'URL de source d\'actualité invalide',
+	
+	'latitude' => array
+	(
+		'required'		=> 'Veuillez indiquer une latitude.',
+		'between' => 'Format de latitude invalide'
 	),
-	'incident_photo' => array(
-		'size' => 'Photo de taille supérieure à 2Mo. Veuiller choisir une photo plus petite.',
-		'type' => 'Format de fichier image invalide. Seuls les formats .JPG, .PNG and .GIF. sont acceptés',
-		'valid' => 'Fichier image invalide',
+	
+	'longitude' => array
+	(
+		'required'		=> 'Veuillez indiquer une longitude.',
+		'between' => 'Format de longitude invalide'
 	),
-	'incident_title' => array(
-		'length' => 'Le titre doit comporter entre 3 et 200 caractères',
-		'required' => 'Veuillez indiquer un titre.',
+	
+	'location_name' => array
+	(
+		'required'		=> 'Veuillez indiquer un lieu.',
+		'length'		=> 'Le champ «lieu» doit comporter entre 3 et 200 caractères.',
 	),
-	'incident_video' => array(
-		'url' => 'URL de vidéo invalide',
+			
+	'incident_category' => array
+	(
+		'required'		=> 'Veuillez indiquer une catégorie.',
+		'numeric'		=> 'Catégorie invalide'
 	),
-	'latitude' => array(
-		'between' => 'Format de latitude invalide',
-		'required' => 'Veuillez indiquer une latitude.',
+	
+	'incident_news' => array
+	(
+			'url'		=> 'URL de source d\'actualité invalide'
 	),
-	'location_name' => array(
-		'length' => 'Le champ «lieu» doit comporter entre 3 et 200 caractères.',
-		'required' => 'Veuillez indiquer un lieu.',
+	
+	'incident_video' => array
+	(
+		'url'		=> 'URL de vidéo invalide'
 	),
-	'longitude' => array(
-		'between' => 'Format de longitude invalide',
-		'required' => 'Veuillez indiquer une longitude.',
+	
+	'incident_photo' => array
+	(
+		'valid'		=> 'Fichier image invalide',
+		'type'		=> 'Format de fichier image invalide. Seuls les formats .JPG, .PNG and .GIF. sont acceptés',
+		'size'		=> 'Photo de taille supérieure à 2Mo. Veuiller choisir une photo plus petite.'
 	),
-	'person_email' => array(
-		'email' => 'Adresse email invalide.',
-		'length' => 'L\'adresse email doit comporter entre 4 et 64 caractères.',
+	
+	'person_first' => array
+	(
+		'length'		=> 'Le prénom doit comporter entre 3 et 100 caractères.'
 	),
-	'person_first' => array(
-		'length' => 'Le prénom doit comporter entre 3 et 100 caractères.',
+	
+	'person_last' => array
+	(
+		'length'		=> 'Le nom de famille doit comporter entre 3 et 100 caractères.'
 	),
-	'person_last' => array(
-		'length' => 'Le nom de famille doit comporter entre 3 et 100 caractères.',
-	));
-?>
+	
+	'person_email' => array
+	(
+		'email'		  => 'Adresse email invalide.',
+		'length'	  => 'L\'adresse email doit comporter entre 4 et 64 caractères.'
+	)
+);

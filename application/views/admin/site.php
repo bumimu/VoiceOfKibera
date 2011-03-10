@@ -72,29 +72,18 @@
 							<?php print form::input('alerts_email', $form['alerts_email'], ' class="text long2"'); ?>
 						</div>
 						<div class="row">
-							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_site_message"); ?>"><?php echo Kohana::lang('settings.site.message');?></a></h4>
-							<?php print form::textarea('site_message', $form['site_message'], ' style="height:40px;"'); ?>
-						</div>
-						<div class="row">
-							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_site_copyright_statement"); ?>"><?php echo Kohana::lang('settings.site.copyright_statement');?></a></h4>
-							<?php print form::textarea('site_copyright_statement', $form['site_copyright_statement'], ' style="height:40px;"'); ?>
-						</div>
-						<div class="row">
 							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_locale"); ?>"><?php echo Kohana::lang('settings.site.language');?></a> (Locale)</h4>
 							<span class="sel-holder">
 								<?php print form::dropdown('site_language', $locales_array, $form['site_language']); ?>
 							</span>
 						</div>
 						<div class="row">
-							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_site_timezone"); ?>"><?php echo Kohana::lang('settings.site.timezone');?></a> (Admin Timezone)</h4>
-							<span class="sel-holder">
-								<?php print form::dropdown('site_timezone',$site_timezone_array, $form['site_timezone']); ?>
-							</span>
-						</div>
-
-						<div class="row">
 							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_display_contact"); ?>"><?php echo Kohana::lang('settings.site.display_contact_page');?></a></h4>
 							<?php print form::dropdown('site_contact_page', $yesno_array, $form['site_contact_page']); ?>
+						</div>
+						<div class="row">
+							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_display_howtohelp"); ?>"><?php echo Kohana::lang('settings.site.display_howtohelp_page');?></a></h4>
+							<?php print form::dropdown('site_help_page', $yesno_array, $form['site_help_page']); ?>
 						</div>
 						<div class="row">
 							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_display_items_per_page"); ?>"><?php echo Kohana::lang('settings.site.items_per_page');?></a></h4>
@@ -117,7 +106,7 @@
 						<div class="row">
 							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_allow_comments"); ?>"><?php echo Kohana::lang('settings.site.allow_comments');?></a></h4>
 							<span class="sel-holder">
-								<?php print form::dropdown('allow_comments', $comments_array, $form['allow_comments']); ?>
+								<?php print form::dropdown('allow_comments', $yesno_array, $form['allow_comments']); ?>
 							</span>
 						</div>
 						<div class="row">
@@ -159,25 +148,7 @@
 									});
 								});
 							</script>
-						</div>
-						<div class="row">
-							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_cache_pages"); ?>"><?php echo Kohana::lang('settings.site.cache_pages');?></a></h4>
-							<span class="sel-holder">
-								<?php print form::dropdown('cache_pages', $yesno_array, $form['cache_pages']); ?>
-							</span>
-						</div>
-						<div class="row">
-							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_cache_pages_lifetime"); ?>"><?php echo Kohana::lang('settings.site.cache_pages_lifetime');?></a></h4>
-							<span class="sel-holder">
-								<?php print form::dropdown('cache_pages_lifetime', $cache_pages_lifetime_array, $form['cache_pages_lifetime']); ?>
-							</span>
-						</div>
-						<div class="row">
-							<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_private_deployment"); ?>"><?php echo Kohana::lang('settings.site.private_deployment');?></a></h4>
-							<span class="sel-holder">
-								<?php print form::dropdown('private_deployment', $yesno_array, $form['private_deployment']); ?>
-							</span>
-						</div>				
+						</div>						
 						<div class="row">
 						<h4><a href="#" class="tooltip" title="<?php echo Kohana::lang("tooltips.settings_google_analytics"); ?>"><?php echo Kohana::lang('settings.site.google_analytics');?></a></h4>
 							<?php echo Kohana::lang('settings.site.google_analytics_example');?> &nbsp;&nbsp;
@@ -188,6 +159,30 @@
 							<div class="row">
 								<?php echo Kohana::lang('settings.site.twitter_hashtags');?>
 								<?php print form::input('twitter_hashtags', $form['twitter_hashtags'], ' class="text"'); ?>
+							</div>
+							<div class="row" style="padding-top:5px;">
+								<?php echo Kohana::lang('ui_main.username');?>
+								<?php print form::input('twitter_username', $form['twitter_username'], ' class="text"'); ?>
+							</div>
+							<div class="row" style="padding-top:5px;">
+								<?php echo Kohana::lang('ui_main.password');?>
+								<?php print form::password('twitter_password', $form['twitter_password'], ' class="text"'); ?>
+							</div>
+						</div>
+						<div class="row">
+							<h4><?php echo Kohana::lang('settings.site.laconica_configuration');?></h4>
+
+							<div class="row">
+								<?php echo Kohana::lang('ui_main.username');?>
+								<?php print form::input('laconica_username', $form['laconica_username'], ' class="text"'); ?>
+							</div>
+								<div class="row" style="padding-top:5px;">
+								<?php echo Kohana::lang('ui_main.password');?>
+								<?php print form::password('laconica_password', $form['laconica_password'], ' class="text"'); ?>
+							</div>
+								<div class="row" style="padding-top:5px;">
+								<?php echo Kohana::lang('settings.site.laconica_site');?>
+								<?php print form::input('laconica_site', $form['laconica_site'], 'class="text long2"'); ?>
 							</div>
 						</div>
 						<div class="row">

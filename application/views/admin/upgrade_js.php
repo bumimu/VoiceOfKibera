@@ -1,7 +1,7 @@
 /**
  * Upgrade js file.
  *
- * Handles javascript stuff related to upgrade functions.
+ * Handles javascript stuff related to dashboard function.
  * 
  * PHP version 5
  * LICENSE: This source file is subject to LGPL license 
@@ -14,7 +14,7 @@
  * @license    http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License (LGPL) 
  */
 // Ajax Submission
-function showFTP()
+function reportAction ()
 {
-	$("#ftp_settings").toggle(400);
+	$("#upgradeMain").submit();	
 }

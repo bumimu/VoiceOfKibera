@@ -157,8 +157,8 @@
 					{
 						gTimelineData = data;
 						//plotPeriod = $.timelinePeriod(gTimelineData[0].data);
-						gStartTime = gStartTime; // || new Date(plotPeriod[0]);
-						gEndTime   = gEndTime; // || new Date(plotPeriod[1]);
+						gStartTime = gStartTime // || new Date(plotPeriod[0]);
+						gEndTime   = gEndTime // || new Date(plotPeriod[1]);
 						if (!gTimelineData[gCategoryId])
 						{
 							gTimelineData[gCategoryId] = {};
@@ -230,7 +230,7 @@
 			{
 				endTime = gEndTime;
 			}
-			return $.grep(dailyGraphData.data, function(n,i) {
+			return $.grep(dailyGraphData[0][this.categoryId].data, function(n,i) {
 				return (n[0] >= gStartTime.getTime() && n[0] <= endTime.getTime());
 			});
 		};
@@ -254,7 +254,7 @@
 			{
 				return this;
 			}
-			
+
 			playTimeline = $.timeline({
 				graphData: {
 					color: plotData.color,
@@ -273,7 +273,7 @@
 			{
 				$('#playTimeline').html('PLAY');
 				$('#playTimeline').parent().attr('class', 'play');
-				this.graphData = allGraphData;
+				this.graphData = allGraphData[0][gCategoryId];
 			} 
 			else
 			{
@@ -289,7 +289,6 @@
 		this.playRainDrops = function()
 		{
 			this.graphData = this.graphData || gTimelineData;
-
 			var plotData = this.graphData;
 			gPlayEndDate = gStartTime.getTime()/1000 + (this.playCount * 60*60*24);
 			var playEndDateTime = new Date(gPlayEndDate * 1000);
@@ -315,7 +314,7 @@
 				categoryId: this.categoryId,
 				startTime: gStartTime,
 				endTime: gEndTime
-			};
+			}
 
 			playTimeline = $.timeline(playOptions);
 			var style = playTimeline.markerStyle();
@@ -327,14 +326,14 @@
 			{
 				$('#playTimeline').html('PLAY');
 				$('#playTimeline').parent().attr('class', 'play');
-				this.graphData = allGraphData;
+				this.graphData = allGraphData[0][gCategoryId];
 			}
 			else
 			{
 				$('#playTimeline').html('PAUSE');
 				$('#playTimeline').parent().attr('class', 'play pause');
 				gTimeline = this;
-				gTimelinePlayHandle = window.setTimeout("gTimeline.playRainDrops()",800);
+				gTimelinePlayHandle = window.setTimeout("gTimeline.playRainDrops()",500);
 			}
 
 			return this;
@@ -367,7 +366,7 @@
 				})
 			});
 			style.rules = [];
-			style.addRules([sliderfilter]);					
+			style.addRules(sliderfilter);					
 			markers.styleMap.styles["default"] = style;
 			markers.redraw();
 			return this;
@@ -410,10 +409,10 @@
 				pointRadius: "${radius}",
 				fillColor: "${color}",
 				fillOpacity: "${opacity}",
-				strokeColor: "${strokeColor}",
+				strokeColor: "${color}",
 				strokeWidth: "${strokeWidth}",
 				strokeOpacity: "0.3",
-				label:"${clusterCount}",
+				label:"${cluster_count}",
 				//labelAlign: "${labelalign}", // IE doesn't like this for some reason
 				fontWeight: "${fontweight}",
 				fontColor: "#ffffff",
@@ -442,7 +441,7 @@
 					fontsize: function(feature)
 					{
 						feature_icon = feature.attributes.icon;
-						if (feature_icon!=="")
+						if (feature_icon!="")
 						{
 							return "9px";
 						}
@@ -478,7 +477,7 @@
 					fontweight: function(feature)
 					{
 						feature_icon = feature.attributes.icon;
-						if (feature_icon!=="")
+						if (feature_icon!="")
 						{
 							return "normal";
 						}
@@ -525,83 +524,58 @@
 					},
 					strokeWidth: function(feature)
 					{
-						if ( typeof(feature.attributes.strokewidth) != 'undefined' && 
-							feature.attributes.strokewidth != '')
+						feature_count = feature.attributes.count;
+						if (feature_count > 10000)
 						{
-							return feature.attributes.strokewidth;
+							return 45;
+						}
+						else if (feature_count > 5000)
+						{
+							return 30;
+						}
+						else if (feature_count > 1000)
+						{
+							return 22;
+						}
+						else if (feature_count > 100)
+						{
+							return 15;
+						}
+						else if (feature_count > 10)
+						{
+							return 10;
+						}
+						else if (feature_count >= 2)
+						{
+							return 5;
 						}
 						else
 						{
-							feature_count = feature.attributes.count;
-							if (feature_count > 10000)
-							{
-								return 45;
-							}
-							else if (feature_count > 5000)
-							{
-								return 30;
-							}
-							else if (feature_count > 1000)
-							{
-								return 22;
-							}
-							else if (feature_count > 100)
-							{
-								return 15;
-							}
-							else if (feature_count > 10)
-							{
-								return 10;
-							}
-							else if (feature_count >= 2)
-							{
-								return 5;
-							}
-							else
-							{
-								return 1;
-							}
+							return 1;
 						}
 					},
 					color: function(feature)
 					{
 						return "#" + feature.attributes.color;
 					},
-					strokeColor: function(feature)
-					{
-						if ( typeof(feature.attributes.strokecolor) != 'undefined' && 
-							feature.attributes.strokecolor != '')
-						{
-							return "#"+feature.attributes.strokecolor;
-						}
-						else
-						{
-							return "#"+feature.attributes.color;
-						}
-					},
 					icon: function(feature)
 					{
 						feature_icon = feature.attributes.icon;
-						if (feature_icon!=="")
+						if (feature_icon!="")
 						{
-							return baseUrl + feature_icon;
+							return baseUrl + "media/uploads/" + feature_icon;
 						} 
 						else
 						{
 							return "";
 						}
 					},
-					clusterCount: function(feature)
+					cluster_count: function(feature)
 					{
 						if (feature.attributes.count > 1)
 						{
-							if($.browser.msie && $.browser.version=="6.0")
-							{ // IE6 Bug with Labels
-								return "";
-							}
-							
 							feature_icon = feature.attributes.icon;
-							if (feature_icon!=="")
+							if (feature_icon!="")
 							{
 								return "> " + feature.attributes.count;
 							} 
@@ -618,7 +592,7 @@
 					opacity: function(feature)
 					{
 						feature_icon = feature.attributes.icon;
-						if (feature_icon!=="")
+						if (feature_icon!="")
 						{
 							return "1";
 						}
@@ -630,9 +604,9 @@
 					labelalign: function(feature)
 					{
 						feature_icon = feature.attributes.icon;
-						if (feature_icon!=="")
+						if (feature_icon!="")
 						{
-							return "c";
+							return "lb";
 						}
 						else
 						{
@@ -658,7 +632,7 @@
 
 			if (thisLayer && thisLayerType == 'shares')
 			{
-				protocolUrl = baseUrl + "json/share/"+thisLayerID+"/";
+				protocolUrl = baseUrl + "json/share/"+thisLayer+"/";
 				thisLayer = "Share_"+thisLayerID;
 				newlayer = true;
 			} 
@@ -738,9 +712,8 @@
 
 			map.addLayer(markers);
 
-			
-//			if (!newlayer)
-//			{ // Keep the Base Layer in Focus
+			if (!newlayer || thisLayerID==8)
+			{
 				selectControl = new OpenLayers.Control.SelectFeature(markers);
 				map.addControl(selectControl);
 				selectControl.activate();
@@ -748,7 +721,7 @@
 					"featureselected": onFeatureSelect,
 					"featureunselected": onFeatureUnselect
 				});
-//			}
+			}
 
 			return markers;
 		};
@@ -797,7 +770,7 @@
 	{
 		timeline = new Timeline(options);
 		return timeline;
-	};
+	}
 	
 	$.timelinePeriod = function(plotData)
 	{

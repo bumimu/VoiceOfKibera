@@ -54,7 +54,7 @@
 		  });
 		};
 
-		/*$().ready(function() {
+		$().ready(function() {
 			// validate signup form on keyup and submit
 			$("#reportForm").validate({
 				rules: {
@@ -166,7 +166,7 @@
 					}
 				}
 			});
-		});*/
+		});
 		
 		function addFormField(div, field, hidden_id, field_type) {
 			var id = document.getElementById(hidden_id).value;
@@ -179,7 +179,7 @@
 		}
 
 		function removeFormField(id) {
-			var answer = confirm("<?php echo Kohana::lang('ui_admin.are_you_sure_you_want_to_delete_this_item'); ?>?");
+			var answer = confirm("Are You Sure You Want To Delete This Item?");
 		    if (answer){
 				$(id).remove();
 		    }
@@ -188,56 +188,56 @@
 		    }
 		}
 		
-		/**
-		 * Google GeoCoder
-		 */
-		function geoCode()
-		{
-			$('#find_loading').html('<img src="<?php echo url::base() . "media/img/loading_g.gif"; ?>">');
-			address = $("#location_find").val();
-			$.post("<?php echo url::site() . 'reports/geocode/' ?>", { address: address },
-				function(data){
-					if (data.status == 'success'){
-						var lonlat = new OpenLayers.LonLat(data.message[1], data.message[0]);
-						lonlat.transform(proj_4326,proj_900913);
-					
-						m = new OpenLayers.Marker(lonlat);
-						markers.clearMarkers();
-				    	markers.addMarker(m);
-						map.setCenter(lonlat, <?php echo $default_zoom; ?>);
-						
-						// Update form values
-						$("#latitude").attr("value", data.message[0]);
-						$("#longitude").attr("value", data.message[1]);
-						$("#location_name").attr("value", $("#location_find").val());
-					} else {
-						alert(address + " not found!\n\n***************************\nEnter more details like city, town, country\nor find a city or town close by and zoom in\nto find your precise location");
-					}
-					$('#find_loading').html('');
-				}, "json");
-			return false;
-		}
-		
 		
 		var map;
-		var thisLayer;
-		var proj_4326 = new OpenLayers.Projection('EPSG:4326');
-		var proj_900913 = new OpenLayers.Projection('EPSG:900913');
 		var markers;
 		$(document).ready(function() {
+			var thisLayer;
+			var proj_4326 = new OpenLayers.Projection('EPSG:4326');
+			var proj_900913 = new OpenLayers.Projection('EPSG:900913');
 			
 			// Now initialise the map
 			var options = {
 			units: "m"
-			, numZoomLevels: 18
+			, numZoomLevels: 16
 			, controls:[],
 			projection: proj_900913,
 			'displayProjection': proj_4326
 			};
 			map = new OpenLayers.Map('divMap', options);
 
-			<?php echo map::layers_js(FALSE); ?>
-			map.addLayers(<?php echo map::layers_array(FALSE); ?>);
+			var default_map = <?php echo $default_map; ?>;
+			if (default_map == 2)
+			{
+				map_layer = new OpenLayers.Layer.VirtualEarth("virtualearth", {
+					sphericalMercator: true,
+					maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34)
+					});
+			}
+			else if (default_map == 3)
+			{
+				map_layer = new OpenLayers.Layer.Yahoo("yahoo", {
+					sphericalMercator: true,
+					maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34)
+					});
+			}
+			else if (default_map == 4)
+			{
+				map_layer = new OpenLayers.Layer.OSM.Mapnik("openstreetmap", {
+					sphericalMercator: true,
+					maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34)
+					});
+			}
+			else
+			{
+				map_layer = new OpenLayers.Layer.Google("google", {
+					sphericalMercator: true,
+					maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34)
+					});
+			}
+				
+			// Add the layer to the map object
+			map.addLayer(map_layer);
 			
 			map.addControl(new OpenLayers.Control.Navigation());
 			map.addControl(new OpenLayers.Control.PanZoom());
@@ -297,16 +297,44 @@
 				}
 			});
 			
-			// GeoCode
+			/* 
+			Google GeoCoder
+			TODO - Add Yahoo and Bing Geocoding Services
+			 */
 			$('.btn_find').live('click', function () {
-				geoCode();
-			});
-			$('#location_find').bind('keypress', function(e) {
-				var code = (e.keyCode ? e.keyCode : e.which);
-				if(code == 13) { //Enter keycode
-					geoCode();
-					return false;
+				address = $("#location_find").val();
+				if ( typeof GBrowserIsCompatible == 'undefined' ) {
+					alert('GeoCoding is only currently supported by Google Maps.\n\nPlease pinpoint the location on the map\nusing your mouse.');
+				} else {
+					var geocoder = new GClientGeocoder();
+					if (geocoder) {
+						$('#find_loading').html('<img src="<?php echo url::base() . "media/img/loading_g.gif"; ?>">');
+						geocoder.getLatLng(
+							address,
+							function(point) {
+								if (!point) {
+									alert(address + " not found!\n\n***************************\nFind a city or town close by and zoom in\nto find your precise location");
+									$('#find_loading').html('');
+								} else {
+									var lonlat = new OpenLayers.LonLat(point.lng(), point.lat());
+									lonlat.transform(proj_4326,proj_900913);
+								
+									m = new OpenLayers.Marker(lonlat);
+									markers.clearMarkers();
+							    	markers.addMarker(m);
+									map.setCenter(lonlat, <?php echo $default_zoom; ?>);
+								
+									// Update form values (jQuery)
+									$("#latitude").attr("value", point.lat());
+									$("#longitude").attr("value", point.lng());
+									$("#location_name").attr("value", $("#location_find").val());
+									$('#find_loading').html('');
+								}
+							}
+						);
+					}
 				}
+				return false;
 			});
 			
 			// Textbox Hints

@@ -20,7 +20,6 @@
 				<?php print form::open(NULL, array('enctype' => 'multipart/form-data', 'id' => 'reportForm', 'name' => 'reportForm')); ?>
 					<input type="hidden" name="save" id="save" value="">
 					<input type="hidden" name="location_id" id="location_id" value="<?php print $form['location_id']; ?>">
-					<input type="hidden" name="incident_zoom" id="incident_zoom" value="<?php print $form['incident_zoom']; ?>">
 					<!-- report-form -->
 					<div class="report-form">
 						<?php
@@ -33,6 +32,7 @@
 								<?php
 								foreach ($errors as $error_item => $error_description)
 								{
+									// print "<li>" . $error_description . "</li>";
 									print (!$error_description) ? '' : "<li>" . $error_description . "</li>";
 								}
 								?>
@@ -102,12 +102,6 @@
 								<h4><?php echo Kohana::lang('ui_main.description');?> <span><?php echo Kohana::lang('ui_main.include_detail');?>.</span></h4>
 								<?php print form::textarea('incident_description', $form['incident_description'], ' rows="12" cols="40"') ?>
 							</div>
-
-							<?php
-							// Action::report_form_admin - Runs just after the report description
-							Event::run('ushahidi_action.report_form_admin', $id);
-							?>
-
 							<?php
 							if (!($id))
 							{ // Use default date for new report
@@ -178,7 +172,7 @@
                                     ?> 
                                 </div>
 
-			                    <div class="report_category">
+			                    <div class="category">
                         	    <?php
 															$selected_categories = array();
 															if (!empty($form['incident_category']) && is_array($form['incident_category'])) {
@@ -187,9 +181,16 @@
 															$columns = 2;
 															echo category::tree($categories, $selected_categories, 'incident_category', $columns);
 															?>
-			                       								</div>
+			                        
+									<ul id="user_categories">
+			                        </ul>
+								</div>
 							</div>
-							
+							<?php
+							// Action::report_form_admin - Runs right before the end of the report submit form
+							// entry form
+							Event::run('ushahidi_action.report_form_admin', $id);
+							?>
 							<div id="custom_forms">
 								<?php
 								foreach ($disp_custom_fields as $field_id => $field_property)
@@ -203,15 +204,15 @@
 										{
 											echo form::input('custom_field['.$field_id.']', $form['custom_field'][$field_id],
 												' id="custom_field_'.$field_id.'" class="text"');
-											echo '<script type="text/javascript">
+											echo "<script type=\"text/javascript\">
 													$(document).ready(function() {
-													$("#custom_field_'.$field_id.'").datepicker({ 
-													showOn: "both", 
-													buttonImage: "'.url::base().'media/img/icon-calendar.gif", 
+													$(\"#custom_field_".$field_id."\").datepicker({ 
+													showOn: \"both\", 
+													buttonImage: \"" . url::base() . "media/img/icon-calendar.gif\", 
 													buttonImageOnly: true 
 													});
 													});
-												</script>';
+												</script>";
 										}
 										else
 										{
@@ -238,40 +239,9 @@
 									<span><?php echo Kohana::lang('ui_main.longitude');?>:</span>
 									<?php print form::input('longitude', $form['longitude'], ' class="text"'); ?>
 								</div>
-								<ul class="map-toggles">
-						          <li><a href="#" class="smaller-map">Smaller map</a></li>
-						          <li style="display:block;"><a href="#" class="wider-map">Wider map</a></li>
-						          <li><a href="#" class="taller-map">Taller map</a></li>
-						          <li><a href="#" class="shorter-map">Shorter Map</a></li>
-						        </ul>
-								<div id="divMap" class="map_holder_reports">
-									<div id="geometryLabelerHolder" class="olControlNoSelect">
-										<div id="geometryLabeler">
-											<div id="geometryLabelComment">
-												<span id="geometryLabel"><label><?php echo Kohana::lang('ui_main.geometry_label');?>:</label> <?php print form::input('geometry_label', '', ' class="lbl_text"'); ?></span>
-												<span id="geometryComment"><label><?php echo Kohana::lang('ui_main.geometry_comments');?>:</label> <?php print form::input('geometry_comment', '', ' class="lbl_text2"'); ?></span>
-											</div>
-											<div>
-												<span id="geometryColor"><label><?php echo Kohana::lang('ui_main.geometry_color');?>:</label> <?php print form::input('geometry_color', '', ' class="lbl_text"'); ?></span>
-												<span id="geometryStrokewidth"><label><?php echo Kohana::lang('ui_main.geometry_strokewidth');?>:</label> <?php print form::dropdown('geometry_strokewidth', $stroke_width_array, ''); ?></span>
-												<span id="geometryLat"><label><?php echo Kohana::lang('ui_main.latitude');?>:</label> <?php print form::input('geometry_lat', '', ' class="lbl_text"'); ?></span>
-												<span id="geometryLon"><label><?php echo Kohana::lang('ui_main.longitude');?>:</label> <?php print form::input('geometry_lon', '', ' class="lbl_text"'); ?></span>
-											</div>
-										</div>
-										<div id="geometryLabelerClose"></div>
-									</div>
-								</div>
+								<div id="divMap" class="map_holder_reports"></div>
 							</div>
 							<div class="incident-find-location">
-								<div id="panel" class="olControlEditingToolbar"></div>
-								<div class="btns" style="float:left;">
-									<ul style="padding:4px;">
-										<li><a href="#" class="btn_del_last"><?php echo strtoupper(Kohana::lang('ui_main.delete_last'));?></a></li>
-										<li><a href="#" class="btn_del_sel"><?php echo strtoupper(Kohana::lang('ui_main.delete_selected'));?></a></li>
-										<li><a href="#" class="btn_clear"><?php echo strtoupper(Kohana::lang('ui_main.clear_map'));?></a></li>
-									</ul>
-								</div>
-								<div style="clear:both;"></div>
 								<?php print form::input('location_find', '', ' title="'.Kohana::lang('ui_main.location_example').'" class="findtext"'); ?>
 								<div class="btns" style="float:left;">
 									<ul>
@@ -393,15 +363,8 @@
                         					if ($photo->media_type == 1)
                         					{
                         						print "<div class=\"report_thumbs\" id=\"photo_". $photo->id ."\">";
-
-                        						$thumb = $photo->media_thumb;
-                        						$photo_link = $photo->media_link;
-												$prefix = url::base().Kohana::config('upload.relative_directory');
-                        						print "<a class='photothumb' rel='lightbox-group1' href='$prefix/$photo_link'>";
-                        						print "<img src=\"$prefix/$thumb\" >";
-                        						print "</a>";
-
-                        						print "&nbsp;&nbsp;<a href=\"#\" onClick=\"deletePhoto('".$photo->id."', 'photo_".$photo->id."'); return false;\" >".Kohana::lang('ui_main.delete')."</a>";
+                        						print "<img src=\"" . url::base() . "media/uploads/" . $photo->media_thumb . "\" >";
+                        						print "&nbsp;&nbsp;<a href=\"#\" onClick=\"deletePhoto('". $photo->id ."', 'photo_". $photo->id ."'); return false;\" >".Kohana::lang('ui_main.delete')."</a>";
                         						print "</div>";
                         					}
                         				}

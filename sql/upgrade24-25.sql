@@ -9,9 +9,9 @@ CREATE TABLE `mhi_log` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 CREATE TABLE `mhi_log_actions` (
-  `id` int(11) NOT NULL,
+  `int` int(11) NOT NULL,
   `description` text NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`int`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `mhi_log_actions` (`id`, `description`) VALUES

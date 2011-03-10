@@ -27,9 +27,7 @@
 
 					<!-- tab -->
 					<div class="tab">
-						<ul>
-							<li><a href="<?php echo url::site(); ?>admin/manage/scheduler/?run_scheduler=1"><?php echo strtoupper(Kohana::lang('ui_main.force_run_scheduler'));?></a></li>
-						</ul>
+						&nbsp;
 					</div>
 				</div>
 				

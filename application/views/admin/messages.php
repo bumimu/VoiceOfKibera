@@ -17,40 +17,29 @@
 				<h2>
 					<?php admin::messages_subtabs($service_id); ?>
 				</h2>
-
-<?php
-	Event::run('ushahidi_action.admin_messages_custom_layout');
-	// Kill the rest of the page if this event has been utilized by a plugin
-	if( ! Event::has_run('ushahidi_action.admin_messages_custom_layout')){
-?>
-
 				<!-- tabs -->
 				<div class="tabs">
 					<!-- tabset -->
 					<ul class="tabset">
-						<li><a href="<?php echo url::site()."admin/messages/index/".$service_id; ?>?type=1" <?php if ($type == '1') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.inbox');?></a></li>
+						<li><a href="?type=1" <?php if ($type == '1') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.inbox');?></a></li>
 						<?php
 						if ($service_id == 1)
 						{
-							?><li><a href="<?php echo url::site()."admin/messages/index/".$service_id; ?>?type=2" <?php if ($type == '2') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.outbox');?></a></li><?php
+							?><li><a href="?type=2" <?php if ($type == '2') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.outbox');?></a></li><?php
 						}
 						?>
-						<?php if ($type == '1')
-						{ ?>
-							<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-							<li><a href="?type=<?php echo $type ?>&level=0" <?php if ($level == '0') echo "class=\"active2\""; ?>><?php echo Kohana::lang('ui_main.all');?> (<?php echo $count_all; ?>)</a></li>
-							<li><a href="?type=<?php echo $type ?>&level=4" <?php if ($level == '4') echo "class=\"active2\""; ?>>Trusted (<?php echo $count_trusted; ?>)</a></li>
-							<li><a href="?type=<?php echo $type ?>&level=2" <?php if ($level == '2') echo "class=\"active2\""; ?>><?php echo Kohana::lang('ui_main.spam');?> (<?php echo $count_spam; ?>)</a></li>
-						<?php } ?>
-						<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-						<li><a href="<?php echo url::site()."admin/messages/reporters/index/".$service_id; ?>">Reporters</a></li>
+						<li><a href="?type=<?php echo $type ?>&period=a" <?php if ($period == 'a') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.all');?></a></li>
+						<li><a href="?type=<?php echo $type ?>&period=d" <?php if ($period == 'd') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.yesterday');?></a></li>
+						<li><a href="?type=<?php echo $type ?>&period=m" <?php if ($period == 'm') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.last_month');?></a></li>
+						<li><a href="?type=<?php echo $type ?>&period=y" <?php if ($period == 'y') echo "class=\"active\""; ?>><?php echo Kohana::lang('ui_main.last_year');?></a></li>
 					</ul>
 					<!-- tab -->
 					<div class="tab">
 						<ul>
-							<li><a href="#" onClick="messagesAction('d', 'DELETE', '')"><?php echo strtoupper(Kohana::lang('ui_main.delete'));?></a></li>
-							<li><a href="#" onClick="messagesAction('s', 'SPAM', '')"><?php echo strtoupper(Kohana::lang('ui_main.spam'));?></a></li>
-							<li><a href="#" onClick="messagesAction('n', 'NOT SPAM', '')"><?php echo strtoupper(Kohana::lang('ui_main.not_spam'));?></a></li>
+							<li><a href="#" onClick="submitIds()"><?php echo strtoupper(Kohana::lang('ui_main.delete'));?></a></li>
+							<?php foreach($levels as $level) { ?>
+								<li><a href="#" onClick="itemAction('rank', 'Mark As <?php echo $level->level_title?>', '', <?php echo $level->id?>)"><?php echo $level->level_title?></a></li>
+							<?php } ?>
 						</ul>
 					</div>
 				</div>
@@ -75,15 +64,14 @@
 				}
 				?>
 				<!-- report-table -->
-				<?php print form::open(NULL, array('id' => 'messageMain', 'name' => 'messageMain')); ?>
+				<?php print form::open(NULL, array('id' => 'messagesMain', 'name' => 'messagesMain')); ?>
 					<input type="hidden" name="action" id="action" value="">
 					<input type="hidden" name="level"  id="level"  value="">
-					<input type="hidden" name="message_id[]" id="message_single" value="">
 					<div class="table-holder">
 						<table class="table">
 							<thead>
 								<tr>
-									<th class="col-1"><input id="checkall" type="checkbox" class="check-box" onclick="CheckAll( this.id, 'message_id[]' )" /></th>
+									<th class="col-1"><input id="checkallincidents" type="checkbox" class="check-box" onclick="CheckAll( this.id, 'message_id[]' )" /></th>
 									<th class="col-2"><?php echo Kohana::lang('ui_main.message_details');?></th>
 									<th class="col-3"><?php echo Kohana::lang('ui_main.date');?></th>
 									<th class="col-4"><?php echo Kohana::lang('ui_main.actions');?></th>
@@ -111,21 +99,16 @@
 								foreach ($messages as $message)
 								{
 									$message_id = $message->id;
-									$message_from = $message->reporter->service_account;
+									$message_from = $message->message_from;
 									$message_to = $message->message_to;
 									$incident_id = $message->incident_id;
 									$message_description = text::auto_link($message->message);
 									$message_detail = nl2br(text::auto_link($message->message_detail));
 									$message_date = date('Y-m-d', strtotime($message->message_date));
 									$message_type = $message->message_type;
-									$message_level = $message->message_level;
-									
-									$level_id = $message->reporter->level_id;
 									?>
-									<tr <?php if ($message_level == "99") {
-										echo " class=\"spam_tr\"";
-									} ?>>
-										<td class="col-1"><input name="message_id[]" id="message" value="<?php echo $message_id; ?>" type="checkbox" class="check-box"/></td>
+									<tr>
+										<td class="col-1"><input name="message_id[]" value="<?php echo $message_id; ?>" type="checkbox" class="check-box"/></td>
 										<td class="col-2">
 											<div class="post">
 												<p><?php echo $message_description; ?></p>
@@ -136,34 +119,12 @@
 													<p><a href="javascript:preview('message_preview_<?php echo $message_id?>')"><?php echo Kohana::lang('ui_main.preview_message');?></a></p>
 													<div id="message_preview_<?php echo $message_id?>" style="display:none;">
 														<?php echo $message_detail; ?>
-														
-														<?php
-				                        				// Retrieve Attachments if any
-				                        				foreach($message->media as $photo) 
-				                        				{
-				                        					if ($photo->media_type == 1)
-				                        					{
-				                        						print "<div class=\"attachment_thumbs\" id=\"photo_". $photo->id ."\">";
-
-				                        						$thumb = $photo->media_thumb;
-				                        						$photo_link = $photo->media_link;
-																$prefix = url::base().Kohana::config('upload.relative_directory');
-				                        						print "<a class='photothumb' rel='lightbox-group".$message_id."' href='$prefix/$photo_link'>";
-				                        						print "<img src=\"$prefix/$thumb\" border=\"0\" >";
-				                        						print "</a>";
-				                        						print "</div>";
-				                        					}
-				                        				}
-									                    ?>
 													</div>
 													<?php
 												}
 												// Action::message_extra_admin  - Message Additional/Extra Stuff
 												Event::run('ushahidi_action.message_extra_admin', $message_id);
 												?>
-
-												<?php if($reply_to == TRUE) { ?>
-
 												<?php
 												if ($service_id == 1 && $message_type == 1)
 												{
@@ -187,8 +148,6 @@
 													<?php
 												}
 												?>
-
-											<?php } ?>
 											</div>
 											<ul class="info">
 												<?php
@@ -198,7 +157,7 @@
 												}
 												else
 												{
-													?><li class="none-separator">From: <a href="<?php echo url::site()."admin/messages/reporters/index/".$service_id."?k=".urlencode($message_from);?>"><strong class="reporters_<?php echo $level_id?>"><?php echo $message_from; ?></strong></a><?php
+													?><li class="none-separator">From: <strong><?php echo $message_from; ?></strong><?php
 												}
 												?>
 											</ul>
@@ -215,7 +174,8 @@
 													echo "<li class=\"none-separator\"><a href=\"". url::base() . 'admin/reports/edit?mid=' . $message_id ."\">Create Report?</a></li>";
 												}
 												?>
-												<li><a href="javascript:messagesAction('d','DELETE','<?php echo(rawurlencode($message_id)); ?>')" class="del"><?php echo Kohana::lang('ui_main.delete');?></a></li>
+												<li>
+                                                <a href="<?php echo url::base().'admin/messages/delete/'.$message_id ?>" onclick="return confirm('Delete cannot be undone. Are you sure you want to continue?')" class="del"><?php echo Kohana::lang('ui_main.delete');?></a></li>
 											</ul>
 										</td>
 									</tr>
@@ -227,7 +187,3 @@
 					</div>
 				<?php print form::close(); ?>
 			</div>
-
-<?php
-	}
-?>

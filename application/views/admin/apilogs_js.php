@@ -26,7 +26,7 @@
 		{ 
 			alert('Please select at least one api log.');
 		} else {
-			var answer = confirm('<?php echo Kohana::lang('ui_admin.are_you_sure_you_want_to'); ?> ' + confirmAction + '?')
+			var answer = confirm('Are You Sure You Want To ' + confirmAction + "?")
 			if (answer){
 				// Set Submit Type
 				$("#action").attr("value", action);
@@ -51,3 +51,5 @@
 			}
 		}
 	}
+
+

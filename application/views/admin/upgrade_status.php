@@ -17,10 +17,23 @@
 <div class="bg">
 	<h2><?php echo $title; ?></h2>
 	
-	<div class="head">
-		<h4><?php echo Kohana::lang('upgrade.upgrading');?>...</h4>
-	</div>
-	<div class="settings_holder">
-		<div id="upgrade_log"></div>
+	<?php if (isset($logs) && count($logs) ) { ?>
+	<h3><?php echo Kohana::lang('upgrade.upgrading');?></h3>
+	<ul>
+		<?php foreach( $logs as $log ) { ?>
+			<li><?php echo $log ?></li>
+		<?php }?>
+	</ul> 
+	
+	<?php }?>
+	
+	<?php if( isset($errors ) && count($errors)){  ?>  
+	<h3><?php echo Kohana::lang('upgrade.upgrade_failed');?></h3>	
+		<ul>
+	<?php foreach($errors as $error)  { ?>
+	<li><?php echo $error ?></li>
+
+	<?php } }?>
+	</ul>
 	</div>
 </div>
