@@ -1,0 +1,99 @@
+/*
+Theme Name: Kibera
+Description: Custom theme using texture
+Demo: 
+Version: 1.0
+Author: Caleb Bell
+Author Email: caleb@ushahidi.com
+*/
+
+/* header */
+body#page{ background: #88644a url(../kibera/images/top_bg.png) top repeat-x; margin:0; padding:0; }
+
+	div#header { background-image:url(../kibera/images/kibera-header.jpg); }
+	
+	div.submit-incident { margin:80px 16px 0 0; }
+
+/* footer */
+div#footer
+{
+	background:transparent url(images/footer-bottom_bg.png) top repeat-x;
+	
+}
+div#underfooter{
+	background:transparent url(images/footer-top_bg.png) top repeat-x;
+	height:45px;
+	top:-45px;
+}
+
+/* links */
+a{
+    color: #3764aa;
+}
+
+a:hover{
+    color: #008cff;
+}
+
+table.table-list tbody tr td a{
+    color: #0099CC;
+}
+
+/* Logo Box */
+div#logo{
+    background:none;
+}
+
+/* Main Menu */
+div#mainmenu{
+    background-color: #C2C2C2;
+}
+
+div#mainmenu a{
+    color: #fff;
+}
+
+div#mainmenu a:hover{
+	color: #fff;
+    background-color: #036564;
+}
+
+div#mainmenu a.active{
+    color: #fff;
+    background-color: #036564;
+}
+
+/* Search/Shary Box */
+div#searchbox { background:none; border:none; }
+
+/* Submit Button */
+div.submit-incident a{
+    background-color: #CDB380;
+    color: #000;
+}
+
+div.submit-incident a:hover{
+	background-color: #036564;
+}
+
+
+/* Category Filter Side Bar */
+ul.category-filters{
+    background: #E7E3DA;
+    border-top-color: #C7C2BC;
+    border-bottom-color: #C7C2BC;
+}
+
+ul.category-filters li a{
+    color: #3F3F3F;
+    border-color: #E7E3DA;
+}
+
+ul.category-filters li a:hover, ul.category-filters li a.active {
+    color: #FFFFFF;
+    background-color: #036564;
+    border-color: #036564;
+}
+
+/* Social Media Columns on Home Page */
+.social-media-column { }
